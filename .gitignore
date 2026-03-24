@@ -4,6 +4,12 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Ignore the environment file specifically
+.env
+
+# Ignore any local environment files
+.env.local
+.env.*.local
 ### STS ###
 .apt_generated
 .classpath
@@ -32,5 +38,4 @@ build/
 ### VS Code ###
 .vscode/
 
-.env
 .mvn
