@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: fitness_user_db
+      POSTGRES_USER: parulsachan86
+      POSTGRES_PASSWORD: Avengers@123
+    ports:
+      - "5432:5432"
