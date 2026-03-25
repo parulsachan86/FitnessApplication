@@ -7,11 +7,13 @@ import com.fitness.activityservice.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
-
 
     public ActivityResponse addActivity( ActivityRequest request) {
         Activity activity = Activity.builder()
@@ -41,4 +43,16 @@ public class ActivityService {
         return response;
     }
 
+    public List<ActivityResponse> getAllActivity(String userID) {
+        List<Activity> activities = activityRepository.findByUserId(userID);
+        return activities.stream()
+                .map(this:: mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public ActivityResponse getActivity(String activityId) {
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new RuntimeException("Activity not present in the database with id: " + activityId));
+        return mapToResponse((activity));
+    }
 }

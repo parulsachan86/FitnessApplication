@@ -32,7 +32,7 @@ public class Activity {
     private Map<String, Object> additionalMetrics;
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; //To get this field populated when instance is created => create MongoConfig class
 
     @LastModifiedDate
     private  LocalDateTime updatedAt;
