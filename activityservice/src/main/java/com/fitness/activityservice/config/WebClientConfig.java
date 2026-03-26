@@ -11,12 +11,13 @@ public class WebClientConfig {
     @Bean
     @LoadBalanced
     public WebClient.Builder webClientBuilder(){
-        return WebClient.Builder();
+        return WebClient.builder();
     }
 
+    @Bean
     public WebClient userServiceWebClient(WebClient.Builder webClientBuilder){
         return webClientBuilder
-                .baseUrl("http://USER_SERVICE")
-                .build()
+                .baseUrl("http://USER-SERVICE")
+                .build();
     }
 }
