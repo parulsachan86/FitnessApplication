@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     @Bean
-    @LoadBalanced
+    @LoadBalanced  //It identifies the service using Eureka
     public WebClient.Builder webClientBuilder(){
         return WebClient.builder();
     }
