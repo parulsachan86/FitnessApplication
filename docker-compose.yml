@@ -11,6 +11,19 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: fitness-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # RabbitMQ default port for communication
+      - "15672:15672" # RabbitMQ Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
 
   mongodb:
     image: mongo:latest
@@ -26,6 +39,9 @@ services:
     volumes:
       - mongo_data:/data/db
 
+
+
 volumes:
   postgres_data:
   mongo_data:
+  rabbitmq_data:

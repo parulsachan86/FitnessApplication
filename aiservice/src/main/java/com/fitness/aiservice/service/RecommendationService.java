@@ -16,9 +16,10 @@ public class RecommendationService {
                  return recommendationRepository.findAllByUserId(userId);
         }
 
-        public Recommendation getACtivityRecommendation(String activityId) {
+        public Recommendation getActivityRecommendation(String activityId) {
                 return recommendationRepository.findByActivityId(activityId)
                         .orElseThrow(() -> new RuntimeException("Activity does not exist with activity id: " + activityId));
 
         }
+
 }

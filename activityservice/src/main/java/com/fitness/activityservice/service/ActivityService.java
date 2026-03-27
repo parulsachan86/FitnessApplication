@@ -1,22 +1,29 @@
 package com.fitness.activityservice.service;
 
+import com.fitness.activityservice.config.RabbitMqConfig;
 import com.fitness.activityservice.dto.ActivityRequest;
 import com.fitness.activityservice.dto.ActivityResponse;
 import com.fitness.activityservice.model.Activity;
 import com.fitness.activityservice.repository.ActivityRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ActivityService {
 
-    private ActivityRepository activityRepository;
-    private ValidateUserService validateUserService;
+    private final ActivityRepository activityRepository;
+    private final ValidateUserService validateUserService;
+    private final RabbitTemplate rabbitTemplate;
+
 
     public ActivityResponse addActivity( ActivityRequest request) {
         Boolean isValidUser = validateUserService.validateUser(request.getUserId());
@@ -34,6 +41,17 @@ public class ActivityService {
                 .build();
 
         Activity savedActivity = activityRepository.save(activity);
+
+        //Publishing data to rabbitMQ
+        try{
+            rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE, RabbitMqConfig.ROUTING_KEY, savedActivity);
+            log.info("Activity send to RabbitMQ:" + savedActivity);
+        }
+        catch(Exception e){
+            log.error("Failed to publish activity to RabbitMQ" + e.getMessage());
+        }
+
+
         return mapToResponse(savedActivity);
     }
 
