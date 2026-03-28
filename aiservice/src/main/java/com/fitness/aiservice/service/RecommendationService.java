@@ -21,5 +21,4 @@ public class RecommendationService {
                         .orElseThrow(() -> new RuntimeException("Activity does not exist with activity id: " + activityId));
 
         }
-
 }

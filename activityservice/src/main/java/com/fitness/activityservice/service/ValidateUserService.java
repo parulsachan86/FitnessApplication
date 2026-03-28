@@ -1,6 +1,7 @@
 package com.fitness.activityservice.service;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.time.Duration;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ValidateUserService {
 
     private final WebClient userServiceWebClient;
