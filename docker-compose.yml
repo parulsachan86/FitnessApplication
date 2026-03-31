@@ -9,8 +9,16 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
+    networks:
+      - keycloak_network
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck: # Required so Keycloak knows when the DB is ready
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USERNAME} -d fitness_user_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: fitness-rabbitmq
@@ -23,6 +31,7 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+
 
 
   mongodb:
@@ -39,7 +48,29 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    restart: always
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres         # This must be 'postgres', not the database name
+      KC_DB_URL: jdbc:postgresql://db:5432/fitness_user_db  # Points to the 'db' service
+      KC_DB_USERNAME: ${POSTGRES_USERNAME}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "8080:8080"
+    networks:
+      - keycloak_network
+    depends_on:
+      db:
+        condition: service_healthy  # Waits for the Postgres healthcheck to pass
 
+networks:
+  keycloak_network:
+    driver: bridge
 
 volumes:
   postgres_data:
