@@ -56,8 +56,8 @@ services:
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KC_DB: postgres         # This must be 'postgres', not the database name
-      KC_DB_URL: jdbc:postgresql://db:5432/fitness_user_db  # Points to the 'db' service
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/fitness_user_db
       KC_DB_USERNAME: ${POSTGRES_USERNAME}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
