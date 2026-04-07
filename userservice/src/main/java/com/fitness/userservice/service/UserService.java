@@ -5,6 +5,7 @@ import com.fitness.userservice.dto.UserReponse;
 import com.fitness.userservice.model.User;
 import com.fitness.userservice.repository.UserRepository;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,12 @@ public class UserService {
         User savedUser = repository.save(newUser);
 
         UserReponse userReponse = new UserReponse();
+        return getUserReponse(savedUser, userReponse);
+    }
+
+    @NonNull
+    private UserReponse getUserReponse(User savedUser, UserReponse userReponse) {
+        userReponse.setId(savedUser.getId());
         userReponse.setEmail(savedUser.getEmail());
         userReponse.setPassword(savedUser.getPassword());
         userReponse.setFirstName((savedUser.getFirstName()));
@@ -42,13 +49,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException(" User does not exist with userId:" + userId));
 
         UserReponse userReponse = new UserReponse();
-        userReponse.setEmail(user.getEmail());
-        userReponse.setPassword(user.getPassword());
-        userReponse.setFirstName((user.getFirstName()));
-        userReponse.setLastName(user.getLastName());
-        userReponse.setCreatedAt(user.getCreatedAt());
-        userReponse.setUpdateAt(user.getUpdateAt());
-        return userReponse;
+        return getUserReponse(user, userReponse);
     }
 
     public Boolean existByUserId(String userId) {

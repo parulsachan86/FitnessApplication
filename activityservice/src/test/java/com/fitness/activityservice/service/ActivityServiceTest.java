@@ -69,12 +69,8 @@ class ActivityServiceTest {
     void addActivity_InvalidUser() {
         ActivityRequest activityRequest1 = getActivityRequest(ActivityType.RUNNING, 100);
         when(validateUserService.validateUser("1")).thenReturn(false);
-        try {
-            ActivityResponse response = activityService.addActivity(activityRequest1);
-            fail("Runtimne Exception expected");
-        } catch (RuntimeException re) {
-
-        }
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> activityService.addActivity(activityRequest1));
+        assertEquals("User does not exist with user_id: 1", exception.getMessage());
     }
 
     @Test

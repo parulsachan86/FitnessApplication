@@ -1,0 +1,36 @@
+spring:
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/api/users/**
+
+            - id: activity-service
+              uri: lb://activity-service
+              predicates:
+                - Path=/api/activities/**
+
+            - id: ai-service
+              uri: lb://ai-service
+              predicates:
+                - Path=/api/recommendation/**
+
+server:
+  port: 9090
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG

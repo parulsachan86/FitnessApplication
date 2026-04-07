@@ -28,7 +28,7 @@ public class ActivityService {
     public ActivityResponse addActivity( ActivityRequest request) {
         Boolean isValidUser = validateUserService.validateUser(request.getUserId());
         if(!isValidUser){
-            throw new RuntimeException("User does not with user_id" + request.getUserId());
+            throw new RuntimeException("User does not exist with user_id: " + request.getUserId());
         }
 
         Activity activity = Activity.builder()
